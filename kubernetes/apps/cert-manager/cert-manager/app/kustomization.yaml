@@ -10,6 +10,7 @@ resources:
 configMapGenerator:
   - name: cert-manager-values
     files:
-      - values.yaml=./helm/values.yaml
-configurations:
-  - ./helm/kustomizeconfig.yaml
+      - values.yaml=./helmvalues.yaml
+    options:
+      labels:
+        reconcile.fluxcd.io/watch: Enabled
