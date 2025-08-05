@@ -8,6 +8,3 @@ configMapGenerator:
   - name: spegel-values
     files:
       - values.yaml=./helmvalues.yaml
-    options:
-      labels:
-        reconcile.fluxcd.io/watch: Enabled

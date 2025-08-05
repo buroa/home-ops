@@ -10,5 +10,3 @@ resources:
 configMapGenerator:
   - name: versions
     env: ./versions.env
-configurations:
-  - ./kustomizeconfig.yaml

@@ -12,6 +12,3 @@ configMapGenerator:
   - name: flux-instance-values
     files:
       - values.yaml=./helmvalues.yaml
-    options:
-      labels:
-        reconcile.fluxcd.io/watch: Enabled

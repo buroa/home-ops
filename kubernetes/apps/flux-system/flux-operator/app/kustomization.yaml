@@ -8,6 +8,3 @@ configMapGenerator:
   - name: flux-operator-values
     files:
       - values.yaml=./helmvalues.yaml
-    options:
-      labels:
-        reconcile.fluxcd.io/watch: Enabled
