@@ -9,6 +9,14 @@ spec:
     # renovate: datasource=custom.talos-factory depName=siderolabs/talos
     version: v1.14.0-rc.1
   healthChecks:
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: Snapshot
+      expr: |-
+        status.phase != 'Running'
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: Restore
+      expr: |-
+        !(status.phase in ['Resolving', 'Restoring'])
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
       expr: |-
