@@ -21,7 +21,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/kromgo
-              tag: 0.16.0@sha256:8e96c0d38e4614ec535083089d206d8cd27de992efa89ca6510070f1bbdc5a2b
+              tag: 0.16.1@sha256:ad39dd32da600ea261112e7a098345d474d48c997790b0373eb651c66e490844
             env:
               KROMGO_METRICS_PORT: &metricsPort 8080
               KROMGO_PROMETHEUS_URL: http://prometheus-operated.observability.svc.cluster.local:9090
