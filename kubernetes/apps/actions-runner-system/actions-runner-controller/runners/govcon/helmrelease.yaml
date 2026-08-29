@@ -13,7 +13,7 @@ spec:
     githubConfigUrl: https://github.com/buroa/govcon
     githubConfigSecret: govcon-runner-secret
     minRunners: 1
-    maxRunners: 3
+    maxRunners: 6
     containerMode:
       type: kubernetes
       kubernetesModeWorkVolumeClaim:
@@ -31,13 +31,13 @@ spec:
         labels:
           runner: *name
       spec:
-        affinity:
-          podAntiAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchLabels:
-                    runner: *name
-                topologyKey: kubernetes.io/hostname
+        topologySpreadConstraints:
+          - maxSkew: 1
+            topologyKey: kubernetes.io/hostname
+            whenUnsatisfiable: DoNotSchedule
+            labelSelector:
+              matchLabels:
+                runner: *name
         containers:
           - name: runner
             image: ghcr.io/home-operations/actions-runner:2.337.0@sha256:8b8e8326b5a08e658a0a41cfd2867afab69ca4194a152f986aa6fcd5430d09e7
