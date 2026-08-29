@@ -13,7 +13,7 @@ spec:
     githubConfigUrl: https://github.com/buroa/govcon
     githubConfigSecret: govcon-runner-secret
     minRunners: 1
-    maxRunners: 6
+    maxRunners: 3
     containerMode:
       type: kubernetes
       kubernetesModeWorkVolumeClaim:
