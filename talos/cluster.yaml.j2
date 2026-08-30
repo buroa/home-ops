@@ -22,6 +22,8 @@ hostDNS:
   enabled: true
   forwardKubeDNSToHost: true # Requires Cilium socketLB features
   resolveMemberNames: true
+searchDomains:
+  domains: []
 ---
 apiVersion: v1alpha1
 kind: DiscoveryServiceConfig
