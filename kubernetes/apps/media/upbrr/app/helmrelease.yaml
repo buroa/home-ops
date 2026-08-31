@@ -62,6 +62,8 @@ spec:
         type: nfs
         server: tank.internal
         path: /mnt/tank/media
+        globalMounts:
+          - readOnly: true
       tmpfs:
         type: emptyDir
         advancedMounts:
