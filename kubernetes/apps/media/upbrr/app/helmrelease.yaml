@@ -17,7 +17,7 @@ spec:
           app:
             image:
               repository: ghcr.io/autobrr/upbrr
-              tag: 0.3.1@sha256:bd0afb49c555b94210fd932a23c052fba58d59f04053edee92347ecd717148dc
+              tag: main@sha256:b658f6573e22a00ee77189641a0b12175492a91f7a54dad2a399343196edf012
             env:
               UPBRR_WEB_PORT: &port 80
               TZ: America/Chicago
