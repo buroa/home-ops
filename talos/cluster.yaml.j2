@@ -38,7 +38,7 @@ clusterSecret: op://Kubernetes/talos/CLUSTER_SECRET
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
-  image: factory.talos.dev/metal-installer/{{ ENV.SCHEMATIC }}:v1.14.0-rc.2
+  image: factory.talos.dev/metal-installer/{{ ENV.SCHEMATIC }}:v1.14.0
 provisioning:
   diskSelector:
     match: disk.bus_path == "/pci0000:00/0000:00:01.4/0000:09:00.0/nvme"
