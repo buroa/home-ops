@@ -104,6 +104,14 @@ spec:
           - backendRefs: *backendRefs
             filters:
               - type: RequestHeaderModifier
+                requestHeaderModifier: *pipeline
+            matches:
+              - path:
+                  type: PathPrefix
+                  value: /:/eventsource
+          - backendRefs: *backendRefs
+            filters:
+              - type: RequestHeaderModifier
                 requestHeaderModifier:
                   <<: *pipeline
                   remove:
