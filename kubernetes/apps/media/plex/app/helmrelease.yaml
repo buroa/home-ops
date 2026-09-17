@@ -92,28 +92,30 @@ spec:
           - name: envoy-external
             namespace: networking
         rules:
-          - backendRefs: &backendRefs
+          - name: app
+            backendRefs: &backendRefs
               - identifier: app
                 port: *port
             filters:
               - type: RequestHeaderModifier
-                requestHeaderModifier: &pipeline
+                requestHeaderModifier:
                   set:
                     - name: X-Plex-Http-Pipeline
                       value: infinite
-          - backendRefs: *backendRefs
-            filters:
-              - type: RequestHeaderModifier
-                requestHeaderModifier: *pipeline
+          - name: events
+            backendRefs: *backendRefs
             matches:
               - path:
                   type: PathPrefix
                   value: /:/eventsource
-          - backendRefs: *backendRefs
+              - path:
+                  type: PathPrefix
+                  value: /:/websockets
+          - name: subtitles
+            backendRefs: *backendRefs
             filters:
               - type: RequestHeaderModifier
                 requestHeaderModifier:
-                  <<: *pipeline
                   remove:
                     - Range
             matches:
