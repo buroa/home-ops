@@ -55,6 +55,8 @@ spec:
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
         scrapeConfigSelectorNilUsesHelmValues: false
+        scrapeNativeHistograms: true
+        scrapeClassicHistograms: true
         retention: 14d
         retentionSize: 50GB
         resources:
