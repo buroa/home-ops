@@ -73,6 +73,9 @@ spec:
             readOnly: true
     route:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            path: /healthz
         hostnames:
           - "{{ .Release.Name }}.k13.dev"
         parentRefs:

@@ -72,6 +72,9 @@ spec:
                 subPath: tmp
     route:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            path: /api/v1/status
         hostnames:
           - "{{ .Release.Name }}.k13.dev"
           - requests.k13.dev
