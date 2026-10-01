@@ -29,9 +29,6 @@ spec:
               AUTOBRR__CHECK_FOR_UPDATES: false
               AUTOBRR__LOG_LEVEL: INFO
               TZ: America/Chicago
-            envFrom:
-              - secretRef:
-                  name: "{{ .Release.Name }}-secret"
             probes:
               liveness:
                 enabled: true
