@@ -23,3 +23,7 @@ spec:
         enabled: true
         name: rook-ceph.rbd.csi.ceph.com
         snapshotPolicy: volumeGroupSnapshot
+    operatorConfig:
+      driverSpecDefaults:
+        imageSet:
+          name: rook-csi-operator-image-set-configmap
