@@ -55,7 +55,7 @@ spec:
           csi:
             keyRotationPolicy: KeyGeneration
             keyGeneration: 2
-            keepPriorKeyCountMax: 1
+            keepPriorKeyCountMax: 0
             keyType: aes256k
       storage:
         devicePathFilter: /dev/disk/by-id/nvme-SAMSUNG_MZQL23T8HCLS-00A07_.*
