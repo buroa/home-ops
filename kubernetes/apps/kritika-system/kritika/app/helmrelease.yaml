@@ -29,7 +29,7 @@ spec:
           webhookSecret: { env: KRITIKA_GITHUB_WEBHOOK_SECRET }
       egress:
         allow: ["*"]
-        deny: [10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, "*.k13.dev", "*.internal"]
+        deny: [192.168.0.0/16]
       trigger:
         exclude: [{ name: forks, expr: pr.fork }]
       agent: { commands: [gh, curl, jq, yq, rg, fd, flate] }
@@ -76,7 +76,7 @@ spec:
       serviceMonitor:
         enabled: true
     networkPolicy:
-      enabled: false
+      enabled: true
     resources:
       requests:
         cpu: 10m
