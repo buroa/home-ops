@@ -17,10 +17,8 @@ spec:
       webUrl: https://{{ .Release.Name }}.k13.dev
       reviewModel: openrouter/~openai/gpt-sol-latest
       reviewFallback: openrouter/~anthropic/claude-opus-latest
-      reviewEffort: high
       confidenceModel: openrouter/~anthropic/claude-sonnet-latest
       confidenceFallback: openrouter/~openai/gpt-sol-latest
-      confidenceEffort: medium
       embeddingModel: openrouter/voyageai/voyage-code-4
       embeddingDims: 1024
     configFile:
