@@ -12,7 +12,7 @@ whether anything in this repository depends on it. A merge rolls
 ## 1. Render the change
 
 ```
-flate diff hr <name> --path kubernetes/flux/cluster --no-progress
+flate diff -n <namespace> <name> --no-progress
 ```
 
 `<name>` is the changed HelmRelease; omit it to diff everything the PR
