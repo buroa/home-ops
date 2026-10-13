@@ -23,7 +23,6 @@ metadata:
 spec:
   dependsOn:
     - name: cilium
-      namespace: kube-system
   interval: 1h
   path: ./kubernetes/apps/kube-system/cilium/config
   prune: true

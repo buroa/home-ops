@@ -23,7 +23,6 @@ metadata:
 spec:
   dependsOn:
     - name: multus
-      namespace: networking
   interval: 1h
   path: ./kubernetes/apps/networking/multus/networks
   prune: true

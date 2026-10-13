@@ -31,7 +31,6 @@ metadata:
 spec:
   dependsOn:
     - name: kritika-database
-      namespace: kritika-system
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease

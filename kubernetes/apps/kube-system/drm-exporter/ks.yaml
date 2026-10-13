@@ -7,7 +7,6 @@ metadata:
 spec:
   dependsOn:
     - name: k8s-gpu-dra-driver
-      namespace: kube-system
   interval: 1h
   path: ./kubernetes/apps/kube-system/drm-exporter/app
   prune: true

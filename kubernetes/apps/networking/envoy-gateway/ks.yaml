@@ -25,7 +25,6 @@ spec:
     - name: cert-manager-issuers
       namespace: cert-manager
     - name: envoy-gateway
-      namespace: networking
   interval: 1h
   path: ./kubernetes/apps/networking/envoy-gateway/proxy
   prune: true

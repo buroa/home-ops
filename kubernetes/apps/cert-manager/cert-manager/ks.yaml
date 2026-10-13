@@ -23,7 +23,6 @@ metadata:
 spec:
   dependsOn:
     - name: cert-manager
-      namespace: cert-manager
   healthCheckExprs:
     - apiVersion: cert-manager.io/v1
       kind: ClusterIssuer

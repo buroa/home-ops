@@ -5,7 +5,6 @@ kind: Kustomization
 resources:
   - ./alert
   - ./receiver
-  - ./repositories
   - ./grafanadashboard.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml

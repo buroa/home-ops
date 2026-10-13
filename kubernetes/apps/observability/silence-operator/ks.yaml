@@ -23,7 +23,6 @@ metadata:
 spec:
   dependsOn:
     - name: silence-operator
-      namespace: observability
   interval: 1h
   path: ./kubernetes/apps/observability/silence-operator/silences
   prune: true
