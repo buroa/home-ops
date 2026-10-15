@@ -15,13 +15,18 @@ spec:
       reloader.stakater.com/auto: "true"
     config:
       webUrl: https://{{ .Release.Name }}.k13.dev
-      reviewModel: openrouter/~openai/gpt-sol-latest
-      reviewFallback: openrouter/~anthropic/claude-opus-latest
-      confidenceModel: openrouter/~anthropic/claude-sonnet-latest
-      confidenceFallback: openrouter/~openai/gpt-sol-latest
-      embeddingModel: openrouter/voyageai/voyage-code-4
-      embeddingDims: 1024
-    configFile:
+      auth:
+        admin:
+          password: { env: KRITIKA_AUTH_ADMIN_PASSWORD }
+      review:
+        model: openrouter/~openai/gpt-sol-latest
+        fallback: openrouter/~anthropic/claude-opus-latest
+      confidence:
+        model: openrouter/~anthropic/claude-sonnet-latest
+        fallback: openrouter/~openai/gpt-sol-latest
+      embedding:
+        model: openrouter/voyageai/voyage-code-4
+        dims: 1024
       apps:
         github:
           accounts: [buroa]
@@ -35,7 +40,7 @@ spec:
         deny: [10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, "*.internal"]
       trigger:
         exclude: [{ name: forks, expr: pr.fork }]
-      agent: { commands: [gh, curl, jq, yq, rg, fd, flate] }
+      agent: { commands: [crane, curl, fd, flate, gh, jq, rg, yq] }
     envFrom:
       - secretRef:
           name: kritika-secret
