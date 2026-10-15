@@ -10,4 +10,5 @@
     "github>buroa/home-ops//.renovate/labels.json5",
     ":timezone(America/Chicago)",
   ],
+  rebaseWhen: "conflicted",
 }

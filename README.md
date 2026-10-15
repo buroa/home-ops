@@ -22,7 +22,7 @@ _... managed with [Flux](https://github.com/fluxcd/flux2), [Renovate](https://gi
 [![Talos](https://kromgo.k13.dev/badges/talos_version)](https://talos.dev)&nbsp;&nbsp;
 [![Kubernetes](https://kromgo.k13.dev/badges/kubernetes_version)](https://kubernetes.io)&nbsp;&nbsp;
 [![Flux](https://kromgo.k13.dev/badges/flux_version)](https://fluxcd.io)&nbsp;&nbsp;
-[![Renovate](https://img.shields.io/github/actions/workflow/status/buroa/home-ops/renovate.yaml?branch=main&label&logo=renovate&color=blue)](https://github.com/buroa/home-ops/actions/workflows/renovate.yaml)
+![Renovate](https://img.shields.io/badge/enabled-blue?logo=renovate)
 
 </div>
 
@@ -65,7 +65,6 @@ Want to build something similar? Start with [onedr0p/cluster-template](https://g
 📁 kubernetes    # Everything Flux reconciles
 ├─📁 apps        # Workloads, grouped by namespace
 ├─📁 components  # Reusable Kustomize components (alerts, kopiur, etc.)
-└─📁 flux        # Flux system configuration and source repositories
 📁 talos         # Talos machine configs and per-node overrides
 ```
 
