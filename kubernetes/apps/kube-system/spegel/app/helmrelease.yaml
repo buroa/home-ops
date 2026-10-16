@@ -12,9 +12,10 @@ spec:
   values:
     grafanaDashboard:
       enabled: true
-    service:
-      registry:
-        hostPort: 29999
+      mode: GrafanaOperator
+      grafanaOperator:
+        matchLabels:
+          dashboards: grafana
     serviceMonitor:
       enabled: true
     spegel:
