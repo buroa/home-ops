@@ -51,6 +51,7 @@ spec:
       acceleration: best-effort
       algorithm: maglev
       mode: dsr
+      serviceTopology: true
     localRedirectPolicies:
       enabled: true
     operator:
