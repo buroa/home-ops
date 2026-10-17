@@ -78,8 +78,6 @@ params:
   net.core.somaxconn: 65535                # 10Gb/s
   net.core.rmem_max: 67108864              # 10Gb/s | Cloudflared / QUIC
   net.core.wmem_max: 67108864              # 10Gb/s | Cloudflared / QUIC
-  net.ipv4.ip_local_port_range: 1024 65535 # Increase port ranges
-  net.ipv4.ping_group_range: 0 2147483647  # Ping non-root
   net.ipv4.tcp_congestion_control: bbr     # 10Gb/s
   net.ipv4.tcp_fastopen: 3                 # Send and accept data in the opening SYN packet
   net.ipv4.tcp_fin_timeout: 15             # Faster timeouts
