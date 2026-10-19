@@ -1,4 +1,9 @@
 [env]
+FLATE_PATH = '{{config_root}}/kubernetes/apps'
 KUBECONFIG = '{{config_root}}/kubernetes/kubeconfig'
 MINIJINJA_CONFIG_FILE = '{{config_root}}/.minijinja.toml'
 TALOSCONFIG = '{{config_root}}/talos/talosconfig'
+JUST_UNSTABLE = "1"
+
+[hooks]
+postinstall = "lefthook install"

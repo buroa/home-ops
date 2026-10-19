@@ -27,6 +27,9 @@ spec:
       embedding:
         model: openrouter/voyageai/voyage-code-4
         dims: 1024
+        documentPrompt: "Represent the document for retrieval: "
+        queryPrompt: "Represent the query for retrieving supporting documents: "
+        similarFloor: 0.3
       apps:
         github:
           accounts: [buroa]
@@ -40,7 +43,6 @@ spec:
         deny: [10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, "*.internal"]
       trigger:
         exclude: [{ name: forks, expr: pr.fork }]
-      agent: { commands: [crane, curl, fd, flate, gh, jq, rg, yq] }
     envFrom:
       - secretRef:
           name: kritika-secret
@@ -52,15 +54,14 @@ spec:
       runner:
         existingSecret: kritika-postgres-runner
     runner:
-      tools:
-        - name: flate
-          image: ghcr.io/home-operations/flate:0.6.5@sha256:e0e2d2de97539b3141977e8bb3bbb50ea5c5afe89477950e5fa972c9862478da
-      resources:
-        requests:
-          cpu: 10m
-          memory: 512Mi
-        limits:
-          memory: 3Gi
+      podTemplate:
+        spec:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 512Mi
+            limits:
+              memory: 2Gi
     httpRoute:
       enabled: true
       annotations:
