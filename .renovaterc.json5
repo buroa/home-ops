@@ -5,10 +5,162 @@
     "github>home-operations/renovate-presets//apps/cnpg.json5#8.1.0",
     "github>home-operations/renovate-presets//apps/grafanaDashboards.json5#8.1.0",
     "github>home-operations/renovate-presets//apps/talosFactory.json5#8.1.0",
-    "github>buroa/home-ops//.renovate/autoMerge.json5",
-    "github>buroa/home-ops//.renovate/groups.json5",
-    "github>buroa/home-ops//.renovate/labels.json5",
     ":timezone(America/Chicago)",
   ],
+  // The Main ruleset does not require up-to-date branches, and `auto` would
+  // still rebase every automerge PR each time main moves
   rebaseWhen: "conflicted",
+  packageRules: [
+    // Auto-merge rules
+    {
+      description: "Auto-merge trusted OCI digests",
+      matchDatasources: ["docker"],
+      matchUpdateTypes: ["digest"],
+      matchPackageNames: ["/home-operations/"],
+      automerge: true,
+      automergeType: "pr",
+      ignoreTests: false,
+    },
+    {
+      description: "Auto-merge high-cadence OCI packages weekly",
+      matchDatasources: ["docker"],
+      matchUpdateTypes: ["minor", "patch"],
+      matchPackageNames: ["/kube-prometheus-stack/"],
+      automerge: true,
+      automergeType: "pr",
+      ignoreTests: false,
+      schedule: ["before 6am on Monday"],
+    },
+    {
+      description: "Auto-merge GitHub Actions",
+      matchManagers: ["github-actions"],
+      matchUpdateTypes: ["minor", "patch", "digest"],
+      automerge: true,
+      automergeType: "pr",
+      minimumReleaseAge: "3 days",
+      ignoreTests: false,
+    },
+    {
+      description: "Auto-merge trusted GitHub Actions",
+      matchManagers: ["github-actions"],
+      matchPackageNames: ["/^actions\\//"],
+      matchUpdateTypes: ["minor", "patch", "digest"],
+      automerge: true,
+      automergeType: "pr",
+      minimumReleaseAge: "1 minute",
+      ignoreTests: false,
+    },
+    {
+      description: "Auto-merge Grafana dashboards",
+      matchDatasources: ["custom.grafana-dashboards"],
+      matchUpdateTypes: ["major"],
+      automerge: true,
+      automergeType: "pr",
+      ignoreTests: false,
+    },
+    {
+      description: "Auto-merge Renovate Presents",
+      matchManagers: ["renovate-config"],
+      matchUpdateTypes: ["minor", "patch"],
+      automerge: true,
+      automergeType: "pr",
+      ignoreTests: false,
+    },
+    // Grouping rules
+    {
+      description: "Actions Runner Controller Group",
+      groupName: "actions-runner-controller",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/gha-runner-scale-set-controller/", "/gha-runner-scale-set/"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      minimumGroupSize: 2,
+    },
+    {
+      description: "Flux Operator Group",
+      groupName: "flux-operator",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/flux-operator/", "/flux-instance/"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      minimumGroupSize: 2,
+    },
+    {
+      description: "Kubernetes Group",
+      groupName: "kubernetes",
+      matchDatasources: ["docker"],
+      matchPackageNames: [
+        "/kube-apiserver/",
+        "/kube-controller-manager/",
+        "/kube-proxy/",
+        "/kube-scheduler/",
+        "/kubelet/",
+      ],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      minimumGroupSize: 5,
+    },
+    {
+      description: "Mise Tools Group",
+      matchManagers: ["mise"],
+      groupName: "mise tools",
+      groupSlug: "mise-tools",
+    },
+    {
+      description: "Rook-Ceph Group",
+      groupName: "rook-ceph",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/rook-ceph/", "/rook-ceph-cluster/"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      minimumGroupSize: 2,
+    },
+    {
+      // Unites the factory installer image and the tuppr upgrade version
+      description: "Talos Group",
+      groupName: "talos",
+      matchPackageNames: ["siderolabs/talos"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      minimumGroupSize: 2,
+    },
+    {
+      description: "Keep CloudNativePG on Postgres 18 until the extension images move with it",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["ghcr.io/cloudnative-pg/postgresql"],
+      allowedVersions: "/^18\\./",
+    },
+    // Commit message rules
+    {
+      // The flux manager also extracts HelmRelease values images, so the file
+      // name is the only signal that a docker dep is a chart
+      description: "Title OCI chart updates as charts instead of images",
+      matchDatasources: ["docker"],
+      matchFileNames: ["**/ocirepository.yaml"],
+      semanticCommitScope: "helm",
+      commitMessageTopic: "chart {{depName}}",
+    },
+    // Labeling rules
+    {
+      matchUpdateTypes: ["major"],
+      addLabels: ["type/major"],
+    },
+    {
+      matchUpdateTypes: ["minor"],
+      addLabels: ["type/minor"],
+    },
+    {
+      matchUpdateTypes: ["patch"],
+      addLabels: ["type/patch"],
+    },
+    {
+      matchUpdateTypes: ["digest"],
+      addLabels: ["type/digest"],
+    },
+  ],
 }
