@@ -8,7 +8,11 @@ spec:
   chartRef:
     kind: OCIRepository
     name: crowdsec
+  install:
+    disableSchemaValidation: true # chart schema lacks the kubernetes acquisition source
   interval: 1h
+  upgrade:
+    disableSchemaValidation: true
   values:
     container_runtime: containerd
     image:
@@ -23,15 +27,18 @@ spec:
         serviceMonitor:
           enabled: true
     agent:
-      acquisition:
-        - namespace: networking
-          podName: envoy-external-*
-          program: envoy
+      isDeployment: true
+      hostVarLog: false
+      serviceAccountName: crowdsec-agent
+      additionalAcquisition:
+        - source: kubernetes
+          namespace: networking
+          selector: gateway.envoyproxy.io/owning-gateway-name=envoy-external
+          labels:
+            type: envoy
       env:
         - name: COLLECTIONS
           value: yanis-kouidri/envoy
-        - name: PARSERS
-          value: crowdsecurity/cri-logs
       metrics:
         serviceMonitor:
           enabled: true
