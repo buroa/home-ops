@@ -16,15 +16,10 @@ spec:
         - 10.244.0.0/16
       bouncer:
         lapiURL: http://crowdsec-service:8080
-        apiKeySecretRef: &apiKeySecretRef
+        apiKeySecretRef:
           name: crowdsec-secret
           key: BOUNCER_KEY_ENVOY
       prometheus:
         enabled: true
         serviceMonitor:
           enabled: true
-      waf:
-        enabled: true
-        appSecURL: http://crowdsec-appsec-service:7422
-        apiKeySecretRef: *apiKeySecretRef
-        failOpen: true
