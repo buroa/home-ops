@@ -6,7 +6,7 @@ metadata:
   name: flux-webhook
   annotations:
     gatus.home-operations.com/endpoint: |-
-      conditions: ["[STATUS] == 403"]
+      conditions: ["[STATUS] == 404"]
 spec:
   hostnames:
     - flux-webhook.k13.dev
