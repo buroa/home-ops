@@ -52,7 +52,7 @@ spec:
             type: appsec
       env:
         - name: COLLECTIONS
-          value: crowdsecurity/appsec-virtual-patching
+          value: crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules
       metrics:
         serviceMonitor:
           enabled: true
