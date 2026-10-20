@@ -42,3 +42,17 @@ spec:
       metrics:
         serviceMonitor:
           enabled: true
+    appsec:
+      enabled: true
+      acquisitions:
+        - source: appsec
+          listen_addr: 0.0.0.0:7422
+          appsec_config: crowdsecurity/appsec-default
+          labels:
+            type: appsec
+      env:
+        - name: COLLECTIONS
+          value: crowdsecurity/appsec-virtual-patching
+      metrics:
+        serviceMonitor:
+          enabled: true
