@@ -13,13 +13,7 @@ spec:
     instance:
       cluster:
         networkPolicy: false
-      components:
-        - source-controller
-        - kustomize-controller
-        - helm-controller
-        - notification-controller
       sync:
-        kind: GitRepository
         url: https://github.com/buroa/home-ops
         ref: refs/heads/main
         path: ./kubernetes/apps

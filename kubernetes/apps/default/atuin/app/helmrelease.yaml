@@ -42,9 +42,7 @@ spec:
                   httpGet:
                     path: /healthz
                     port: *port
-                  periodSeconds: 10
                   timeoutSeconds: 5
-                  failureThreshold: 3
             resources:
               requests:
                 cpu: 10m
@@ -72,10 +70,6 @@ spec:
         parentRefs:
           - name: envoy-internal
             namespace: networking
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
     service:
       app:
         ports:

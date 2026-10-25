@@ -29,15 +29,11 @@ spec:
                   httpGet:
                     path: /identity
                     port: &port 32400
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
                   timeoutSeconds: 5
-                  failureThreshold: 3
               readiness: *probes
               startup:
                 enabled: true
                 spec:
-                  periodSeconds: 10
                   failureThreshold: 30
             resources:
               claims:
@@ -93,8 +89,7 @@ spec:
         rules:
           - name: app
             backendRefs: &backendRefs
-              - identifier: app
-                port: *port
+              - port: *port
             filters:
               - type: RequestHeaderModifier
                 requestHeaderModifier:
@@ -105,10 +100,8 @@ spec:
             backendRefs: *backendRefs
             matches:
               - path:
-                  type: PathPrefix
                   value: /:/eventsource
               - path:
-                  type: PathPrefix
                   value: /:/websockets
           - name: subtitles
             backendRefs: *backendRefs
@@ -119,7 +112,6 @@ spec:
                     - Range
             matches:
               - path:
-                  type: PathPrefix
                   value: /library/streams
     service:
       app:

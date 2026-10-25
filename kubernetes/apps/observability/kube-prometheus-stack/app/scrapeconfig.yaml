@@ -8,10 +8,8 @@ spec:
   staticConfigs:
     - targets:
         - tank.internal:9100
-  metricsPath: /metrics
   relabelings:
-    - action: replace
-      targetLabel: job
+    - targetLabel: job
       replacement: node-exporter
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/scrapeconfig_v1alpha1.json
@@ -23,10 +21,8 @@ spec:
   staticConfigs:
     - targets:
         - tank.internal:9633
-  metricsPath: /metrics
   relabelings:
-    - action: replace
-      targetLabel: job
+    - targetLabel: job
       replacement: smartctl-exporter
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/scrapeconfig_v1alpha1.json
@@ -40,8 +36,6 @@ spec:
         - m0-kvm.internal
         - m1-kvm.internal
         - m2-kvm.internal
-  metricsPath: /metrics
   relabelings:
-    - action: replace
-      targetLabel: job
+    - targetLabel: job
       replacement: jetkvm

@@ -16,9 +16,6 @@ spec:
         cronjob:
           schedule: "@daily"
           timeZone: America/Chicago
-          concurrencyPolicy: Forbid
-          successfulJobsHistory: 1
-          failedJobsHistory: 1
         containers:
           app:
             image:
