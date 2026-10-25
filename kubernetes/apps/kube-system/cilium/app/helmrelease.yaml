@@ -58,10 +58,8 @@ spec:
       dashboards:
         enabled: true
       prometheus:
-        enabled: true
         serviceMonitor:
           enabled: true
-      replicas: 2
       rollOutPods: true
     pmtuDiscovery:
       enabled: true

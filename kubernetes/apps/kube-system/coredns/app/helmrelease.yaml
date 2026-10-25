@@ -23,8 +23,7 @@ spec:
       clusterIP: 10.245.0.10
     servers:
       - zones:
-          - zone: .
-            scheme: dns://
+          - scheme: dns://
             use_tcp: true
         port: 53
         plugins:

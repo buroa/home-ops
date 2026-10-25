@@ -14,15 +14,12 @@ spec:
     cephClusterSpec:
       cleanupPolicy:
         wipeDevicesFromOtherClusters: true
-      crashCollector:
-        disable: false
       csi:
         readAffinity:
           enabled: true
           crushLocationLabels:
             - kubernetes.io/hostname
       dashboard:
-        enabled: true
         urlPrefix: /
         ssl: false
         prometheusEndpoint: http://prometheus-operated.observability.svc.cluster.local:9090
@@ -48,7 +45,6 @@ spec:
       storage:
         devicePathFilter: /dev/disk/by-id/nvme-SAMSUNG_MZQL23T8HCLS-00A07_.*
         useAllDevices: false
-        useAllNodes: true
     monitoring:
       enabled: true
       createPrometheusRules: true
@@ -58,8 +54,6 @@ spec:
       dashboard:
         host:
           name: rook.k13.dev
-          path: /
-          pathType: PathPrefix
         parentRefs:
           - name: envoy-internal
             namespace: networking
@@ -72,7 +66,6 @@ spec:
         storageClass:
           enabled: true
           name: ceph-block
-          allowVolumeExpansion: true
           isDefault: true
           mountOptions:
             - discard
@@ -87,12 +80,9 @@ spec:
             csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
             imageFeatures: deep-flatten,exclusive-lock,fast-diff,layering,object-map
             imageFormat: "2"
-          reclaimPolicy: Delete
-          volumeBindingMode: Immediate
     cephBlockPoolsVolumeSnapshotClass:
       enabled: true
       name: csi-ceph-block
       isDefault: true
-      deletionPolicy: Delete
     cephFileSystems: []
     cephObjectStores: []

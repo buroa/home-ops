@@ -29,15 +29,11 @@ spec:
                   httpGet:
                     path: /api/v2/app/version
                     port: *port
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
                   timeoutSeconds: 5
-                  failureThreshold: 3
               readiness: *probes
               startup:
                 enabled: true
                 spec:
-                  periodSeconds: 10
                   failureThreshold: 30
             resources:
               requests:
@@ -82,7 +78,6 @@ spec:
         rules:
           - backendRefs:
               - identifier: app
-                port: *port
     service:
       app:
         forceRename: "{{ .Release.Name }}"
@@ -98,4 +93,3 @@ spec:
         ports:
           bittorrent-tcp:
             port: *bittorrentPort
-            protocol: TCP

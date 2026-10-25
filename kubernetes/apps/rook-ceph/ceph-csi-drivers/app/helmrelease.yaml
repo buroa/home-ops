@@ -12,7 +12,6 @@ spec:
   values:
     drivers:
       cephfs:
-        enabled: true
         name: rook-ceph.cephfs.csi.ceph.com
         snapshotPolicy: volumeGroupSnapshot
       nfs:
@@ -20,7 +19,6 @@ spec:
       nvmeof:
         enabled: false
       rbd:
-        enabled: true
         name: rook-ceph.rbd.csi.ceph.com
         snapshotPolicy: volumeGroupSnapshot
     operatorConfig:

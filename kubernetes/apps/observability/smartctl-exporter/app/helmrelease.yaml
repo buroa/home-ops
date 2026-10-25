@@ -11,8 +11,6 @@ spec:
   interval: 1h
   values:
     fullnameOverride: *app
-    prometheusRules:
-      enabled: false
     serviceMonitor:
       enabled: true
       relabelings:

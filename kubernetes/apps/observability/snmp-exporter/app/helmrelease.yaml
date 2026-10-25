@@ -15,7 +15,6 @@ spec:
       enabled: true
       params:
         - name: ups
-          auth: [public_v2]
           module: [apcups]
           target: ups.internal
       relabelings:

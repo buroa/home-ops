@@ -12,6 +12,5 @@ spec:
   source:
     fromPolicy:
       name: ${APP}
-      offset: 0 # 0 = latest snapshot
   target:
     populator: {}

@@ -39,10 +39,7 @@ spec:
                   httpGet:
                     path: /ready
                     port: &port 80
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
                   timeoutSeconds: 5
-                  failureThreshold: 3
               readiness: *probes
             resources:
               requests:
