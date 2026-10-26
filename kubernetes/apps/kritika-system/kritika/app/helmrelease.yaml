@@ -85,9 +85,7 @@ spec:
       serviceMonitor:
         enabled: true
     networkPolicy:
-      postgres:
-        podSelector:
-          cnpg.io/cluster: kritika-postgres
+      enabled: false
     resources:
       requests:
         cpu: 10m
