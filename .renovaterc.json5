@@ -13,23 +13,12 @@
   packageRules: [
     // Auto-merge rules
     {
-      description: "Auto-merge trusted OCI digests",
+      description: "Auto-merge container images",
       matchDatasources: ["docker"],
-      matchUpdateTypes: ["digest"],
-      matchPackageNames: ["/home-operations/"],
+      matchUpdateTypes: ["minor", "patch", "digest"],
       automerge: true,
       automergeType: "pr",
       ignoreTests: false,
-    },
-    {
-      description: "Auto-merge high-cadence OCI packages weekly",
-      matchDatasources: ["docker"],
-      matchUpdateTypes: ["minor", "patch"],
-      matchPackageNames: ["/kube-prometheus-stack/"],
-      automerge: true,
-      automergeType: "pr",
-      ignoreTests: false,
-      schedule: ["before 6am on Monday"],
     },
     {
       description: "Auto-merge GitHub Actions",
