@@ -18,7 +18,7 @@ spec:
   postBuild:
     substitute:
       APP: plex
-      KOPIUR_CAPACITY: 50Gi
+      KOPIUR_CAPACITY: 100Gi
   prune: true
   sourceRef:
     kind: GitRepository
