@@ -21,6 +21,7 @@ spec:
       review:
         model: openrouter/~openai/gpt-sol-latest
         fallback: openrouter/~anthropic/claude-opus-latest
+        approve: true
       confidence:
         model: openrouter/~anthropic/claude-sonnet-latest
         fallback: openrouter/~openai/gpt-sol-latest
