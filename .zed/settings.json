@@ -1,0 +1,41 @@
+{
+  "languages": {
+    "JSON": {
+      "formatter": {
+        "external": { "command": "oxfmt", "arguments": ["--stdin-filepath", "{buffer_path}"] }
+      }
+    },
+    "JSON5": {
+      "formatter": {
+        "external": { "command": "oxfmt", "arguments": ["--stdin-filepath", "{buffer_path}"] }
+      }
+    },
+    "JSONC": {
+      "formatter": {
+        "external": { "command": "oxfmt", "arguments": ["--stdin-filepath", "{buffer_path}"] }
+      }
+    },
+    "Markdown": {
+      "formatter": {
+        "external": { "command": "oxfmt", "arguments": ["--stdin-filepath", "{buffer_path}"] }
+      }
+    },
+    "YAML": {
+      "formatter": {
+        "external": { "command": "oxfmt", "arguments": ["--stdin-filepath", "{buffer_path}"] }
+      }
+    }
+  },
+  "lsp": {
+    "yaml-language-server": {
+      "settings": {
+        "yaml": {
+          "schemas": {
+            "kubernetes": "./kubernetes/**/*.yaml"
+          }
+        }
+      }
+    }
+  },
+  "wrap_guides": [100]
+}
