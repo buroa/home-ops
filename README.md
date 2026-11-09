@@ -43,18 +43,18 @@ _... managed with [Flux](https://github.com/fluxcd/flux2), [Renovate](https://gi
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4a1/512.webp" alt="💡" width="20" height="20"> Overview
 
-This repository is the single source of truth for my home Kubernetes cluster and the workloads that run on it. Every cluster resource — from the operating system layer down to individual application Helm releases — is declared as code and reconciled automatically.
+This repository holds all of the configuration for my home Kubernetes cluster and the workloads that run on it. Every resource of the cluster is code, from the operating system to the Helm release of each application. The cluster applies changes to this code automatically.
 
-The stack is intentionally boring and reproducible:
+The stack is simple on purpose, and you can build it again from this repository:
 
-- [Talos Linux](https://github.com/siderolabs/talos) — Immutable, API-driven OS that runs nothing but Kubernetes.
-- [Flux](https://github.com/fluxcd/flux2) — Continuous reconciliation of cluster state against this repository.
-- [Renovate](https://github.com/renovatebot/renovate) — Automated dependency updates across the entire cluster.
-- [GitHub Actions](https://github.com/features/actions) — Validation and automation on every commit.
+- [Talos Linux](https://github.com/siderolabs/talos): a read-only, API-managed operating system for Kubernetes.
+- [Flux](https://github.com/fluxcd/flux2): continuous sync of the cluster with this repository.
+- [Renovate](https://github.com/renovatebot/renovate): automatic dependency updates for the whole cluster.
+- [GitHub Actions](https://github.com/features/actions): tests and automation on every commit.
 
-Disaster recovery is built in. Wipe every disk in the rack. Minutes later, the cluster is back — applications running, persistent data intact, zero manual steps. It picks up exactly where it left off.
+The cluster can recover from a full loss. If you erase every disk in the rack, the cluster comes back within minutes. The applications run again and the persistent data is intact, with no manual steps. The cluster continues from the point where it stopped.
 
-Want to build something similar? Start with [onedr0p/cluster-template](https://github.com/onedr0p/cluster-template).
+To build a similar cluster, start with [onedr0p/cluster-template](https://github.com/onedr0p/cluster-template).
 
 ---
 
@@ -62,40 +62,40 @@ Want to build something similar? Start with [onedr0p/cluster-template](https://g
 
 ```sh
 📁 bootstrap     # One-time cluster bootstrap (helmfile + kustomize)
-📁 kubernetes    # Everything Flux reconciles
+📁 kubernetes    # Everything that Flux applies
 ├─📁 apps        # Workloads, grouped by namespace
 ├─📁 components  # Reusable Kustomize components (alerts, kopiur, etc.)
-📁 talos         # Talos machine configs and per-node overrides
+📁 talos         # Talos machine configuration and overrides for each node
 ```
 
 ---
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f3a1/512.webp" alt="🎡" width="20" height="20"> Cluster
 
-A semi hyper-converged, three-node Kubernetes cluster running on bare-metal [MS-A2](https://store.minisforum.com/products/minisforum-ms-a2) workstations. Persistent storage lives inside the cluster via [Rook Ceph](https://github.com/rook/rook), with bulk media offloaded to a dedicated TrueNAS box over NFS.
+The cluster has three Kubernetes nodes on bare-metal [MS-A2](https://store.minisforum.com/products/minisforum-ms-a2) workstations. It is semi hyper-converged: the same nodes run the workloads and most of the storage. [Rook Ceph](https://github.com/rook/rook) keeps the persistent storage inside the cluster. A dedicated TrueNAS server keeps the bulk media and shares it over NFS.
 
 ### Core components
 
-- [actions-runner-controller](https://github.com/actions/actions-runner-controller) — Self-hosted GitHub runners for CI/CD workflows.
-- [cert-manager](https://github.com/cert-manager/cert-manager) — Automated SSL certificate management and provisioning.
-- [cilium](https://github.com/cilium/cilium) — High-performance container networking powered by [eBPF](https://ebpf.io).
-- [cloudflared](https://github.com/cloudflare/cloudflared) — Secure tunnel providing Cloudflare-protected access to cluster services.
-- [envoy-gateway](https://github.com/envoyproxy/gateway) — Modern ingress controller for cluster traffic management.
-- [external-dns](https://github.com/kubernetes-sigs/external-dns) — Automated DNS record synchronization for ingress resources.
-- [external-secrets](https://github.com/external-secrets/external-secrets) — Kubernetes secrets management integrated with [1Password](https://1password.com).
-- [kopiur](https://github.com/home-operations/kopiur) — Advanced backup and recovery solution for persistent volume claims.
-- [multus](https://github.com/k8snetworkplumbingwg/multus-cni) — Multi-homed pod networking for advanced network configurations.
-- [rook](https://github.com/rook/rook) — Cloud-native distributed storage orchestrator for persistent storage.
-- [spegel](https://github.com/spegel-org/spegel) — Stateless cluster-local OCI registry mirror for improved performance.
+- [actions-runner-controller](https://github.com/actions/actions-runner-controller): self-hosted GitHub runners for CI/CD workflows.
+- [cert-manager](https://github.com/cert-manager/cert-manager): automatic issue and renewal of SSL certificates.
+- [cilium](https://github.com/cilium/cilium): container networking with [eBPF](https://ebpf.io).
+- [cloudflared](https://github.com/cloudflare/cloudflared): a tunnel to cluster services through Cloudflare, which protects them.
+- [envoy-gateway](https://github.com/envoyproxy/gateway): the ingress controller for traffic into the cluster.
+- [external-dns](https://github.com/kubernetes-sigs/external-dns): automatic DNS records for the ingress resources.
+- [external-secrets](https://github.com/external-secrets/external-secrets): Kubernetes secrets from [1Password](https://1password.com).
+- [kopiur](https://github.com/home-operations/kopiur): backup and recovery for persistent volume claims.
+- [multus](https://github.com/k8snetworkplumbingwg/multus-cni): extra network interfaces for pods.
+- [rook](https://github.com/rook/rook): distributed storage for persistent volumes.
+- [spegel](https://github.com/spegel-org/spegel): a stateless OCI registry mirror inside the cluster, for faster image pulls.
 
 ### GitOps workflow
 
-Flux watches the [kubernetes](./kubernetes) directory and reconciles the cluster on every commit. The flow is:
+Flux watches the [kubernetes](./kubernetes) directory. On every commit, Flux makes the cluster match it in these steps:
 
-1. Flux recursively scans [kubernetes/apps](./kubernetes/apps) and reads each top-level `kustomization.yaml`.
-2. Those entrypoints typically declare a `Namespace` and one or more Flux `Kustomization` resources (`ks.yaml`).
-3. Each Flux `Kustomization` materializes a `HelmRelease` (or raw manifests) for an application.
-4. Flux applies them in dependency order — e.g. nothing in `rook-ceph` deploys until its prerequisites are healthy.
+1. Flux scans [kubernetes/apps](./kubernetes/apps) and all of its subdirectories, and reads each top-level `kustomization.yaml`.
+2. Each of these entry points usually declares a `Namespace` and one or more Flux `Kustomization` resources (`ks.yaml`).
+3. Each Flux `Kustomization` creates a `HelmRelease`, or raw manifests, for an application.
+4. Flux applies them in the order of their dependencies. For example, nothing in `rook-ceph` deploys until its prerequisites are healthy.
 
 ```mermaid
 graph LR
@@ -120,7 +120,7 @@ graph LR
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f30e/512.webp" alt="🌎" width="20" height="20"> Networking
 
-A multi-tier home network built on UniFi hardware. The UDM Beast handles routing and firewalling between RCN's 5Gbps WAN and the LAN. A 25G aggregation switch forms the backbone — bonded to the NAS at 25G LACP and to each Kubernetes node at 10G LACP — while a 24-port PoE+ switch fans out to wired clients and access points.
+The home network has several tiers and uses UniFi hardware. The UDM Beast does the routing and the firewall between the LAN and the 5Gbps WAN from RCN. A 25G aggregation switch is the backbone. It connects to the NAS with 25G LACP and to each Kubernetes node with 10G LACP. A 24-port PoE+ switch connects the wired clients and the access points.
 
 ```mermaid
 graph LR
@@ -175,12 +175,9 @@ graph LR
 
 ### DNS
 
-Two [ExternalDNS](https://github.com/kubernetes-sigs/external-dns) instances handle DNS automation:
+Two [ExternalDNS](https://github.com/kubernetes-sigs/external-dns) instances manage the DNS records. The private instance syncs every route to the UDM Beast through the [ExternalDNS UniFi webhook](https://github.com/kashalls/external-dns-unifi-webhook). The public instance syncs the routes on the `external` Gateway to Cloudflare.
 
-- **Private** — Syncs every route to the UDM Beast via the [ExternalDNS UniFi webhook](https://github.com/kashalls/external-dns-unifi-webhook).
-- **Public** — Syncs routes on the `external` Gateway to Cloudflare.
-
-The result is split-horizon DNS: at home, public hostnames resolve to LAN IPs, so traffic to my own services never leaves the network.
+The result is split-horizon DNS, which gives different answers inside and outside the home. At home, public hostnames resolve to LAN IPs. Traffic from home to my own services thus never leaves the network.
 
 ---
 
@@ -205,7 +202,7 @@ The result is split-horizon DNS: at home, public hostnames resolve to LAN IPs, s
 
 ### MS-A2 build
 
-Each MS-A2 (AMD Ryzen™ 9 9955HX) workstation is equipped with:
+Each MS-A2 workstation (AMD Ryzen™ 9 9955HX) has these parts:
 
 - [Crucial 96GB Kit (48GBx2) DDR5-5600 SODIMM](https://www.amazon.com/dp/B0C79K5VGZ)
 - [Samsung 1.92TB M.2 22x110mm PM9A3 NVMe PCIe 4.0](https://www.amazon.com/dp/B0B23N4P7L)
@@ -216,7 +213,7 @@ Each MS-A2 (AMD Ryzen™ 9 9955HX) workstation is equipped with:
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f64f/512.webp" alt="🙏" width="20" height="20"> Thanks
 
-A huge thank you to [@onedr0p](https://github.com/onedr0p) and the [Home Operations](https://discord.gg/home-operations) Discord community for the knowledge, patterns, and support that made this cluster possible. For more inspiration on running apps in a homelab, browse [kubesearch.dev](https://kubesearch.dev).
+Thank you to [@onedr0p](https://github.com/onedr0p) and the [Home Operations](https://discord.gg/home-operations) Discord community. Their help and their patterns made this cluster possible. For more examples of apps in a homelab, browse [kubesearch.dev](https://kubesearch.dev).
 
 ---
 
