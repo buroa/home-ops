@@ -1,28 +1,24 @@
 # Rendering a HelmRelease with flate
 
 When a chart version or a HelmRelease's values change, render the
-HelmRelease with this repository's values, from the repository root, with
-the namespace's directory as the path.
+HelmRelease with this repository's values, from the repository root,
+selecting its namespace with `-n`.
 
 With git history, diff it against the base, which flate renders from that
 revision in a temporary directory:
 
 ```
-flate diff hr <name> --base origin/main --path kubernetes/apps/<namespace> --no-progress -o diff
+flate diff hr <name> -n <namespace> --base origin/main --no-progress -o diff
 ```
+
+A HelmRelease whose render is the same on both sides is left out of the
+diff, so naming it exits nonzero with `no HelmRelease named "<name>"`.
+That means the change does not reach its output, not that it is missing.
 
 Without history, as in kritika's checkout, build the head alone:
 
 ```
-flate build hr <name> --path kubernetes/apps/<namespace> --no-progress
-```
-
-A HelmRelease whose Kustomization depends on one in another namespace is
-reported as blocked there; render it from the whole tree instead, which
-takes several times the memory:
-
-```
-flate build hr <name> -n <namespace> --path kubernetes/apps --no-progress
+flate build hr <name> -n <namespace> --no-progress
 ```
 
 flate reports every failure in the namespace, not only the requested
@@ -39,6 +35,6 @@ Kustomization are not, and templates that branch on Kubernetes
 capabilities see flate's bundled version, not the cluster's. Within that,
 take the label values, resource names and ports the search for
 dependents needs from the render rather than from a reading of the template,
-and narrow it with `--show-only <template path>` when the whole output is
-too long. Where only the head renders, what the base produced is read
+and narrow it to the kinds it needs with `--only-kinds <Kind>,<Kind>` when
+the whole output is too long. Where only the head renders, what the base produced is read
 upstream, or from the names this repository already refers to.
