@@ -9,9 +9,17 @@ spec:
     compressor: zstd
   credentialProjection:
     enabled: true
+  mover:
+    cache:
+      capacity: ${KOPIUR_CAPACITY:=5Gi}
+      mode: Persistent
+      storageClassName: openebs-hostpath
+    securityContext:
+      runAsUser: ${KOPIUR_PUID:=1000}
+      runAsGroup: ${KOPIUR_PGID:=1000}
   repository:
     kind: ClusterRepository
-    name: nas
+    name: tank
   retention:
     keepLatest: 3
     keepHourly: 24
@@ -20,11 +28,4 @@ spec:
   sources:
     - pvc:
         name: ${APP}
-  verification:
-    deep:
-      schedule:
-        cron: H 5 1 * * # First of the month at 5am
-    quick:
-      schedule:
-        cron: H 3 * * * # Every day at 3am
   volumeSnapshotClassName: ${KOPIUR_SNAPSHOTCLASS:=csi-ceph-block}

@@ -3,38 +3,42 @@
 apiVersion: kopiur.home-operations.com/v1alpha1
 kind: ClusterRepository
 metadata:
-  name: nas
+  name: tank
 spec:
   allowedNamespaces:
     all: true
   backend:
-    filesystem:
-      path: /repo
-      volume:
-        nfs:
-          server: tank.internal
-          path: /mnt/sank/kopiur
+    s3:
+      auth:
+        secretRef:
+          name: kopiur-repository-secret
+          namespace: kopiur-system
+      bucket: kopiur
+      endpoint: tank.internal:9000
+      region: us-east-1
+      tls:
+        disableTls: true
   credentialProjection:
     allowed: true
   encryption:
     passwordSecretRef:
-      name: kopiur-nas-secret
+      name: kopiur-repository-secret
       namespace: kopiur-system
       key: KOPIA_PASSWORD
+  maintenance:
+    schedule:
+      quick:
+        cron: 0 * * * *
+        jitter: 10m
+      full:
+        cron: 0 3 * * *
+        jitter: 1h
   moverDefaults:
     cache:
-      capacity: 1Mi # Ignored
-      mode: Ephemeral
-      storageClassName: openebs-hostpath
-    podSecurityContext:
-      fsGroup: 1000
-      fsGroupChangePolicy: OnRootMismatch
-    scratch:
-      capacity: 1Mi # Ignored
-      storageClassName: openebs-hostpath
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-    ttlSecondsAfterFinished: 300
+      contentCacheSizeMb: 512
+      metadataCacheSizeMb: 1024
+  parameters:
+    epoch:
+      minDuration: 1h
   scheduleDefaults:
     timezone: America/Chicago
