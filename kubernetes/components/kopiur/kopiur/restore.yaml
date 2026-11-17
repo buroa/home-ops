@@ -8,7 +8,7 @@ spec:
   credentialProjection:
     enabled: true
   policy:
-    onMissingSnapshot: Continue # default for fromPolicy — empty volume if none
+    onMissingSnapshot: Continue
   source:
     fromPolicy:
       name: ${APP}
