@@ -2,7 +2,6 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: [
     "github>home-operations/renovate-presets#12.0.0",
-    "github>home-operations/renovate-presets//apps/cnpg.json5#12.0.0",
     "github>home-operations/renovate-presets//apps/grafanaDashboards.json5#12.0.0",
     "github>home-operations/renovate-presets//apps/talosFactory.json5#12.0.0",
     ":timezone(America/Chicago)",
@@ -10,15 +9,37 @@
   // The Main ruleset does not require up-to-date branches, and `auto` would
   // still rebase every automerge PR each time main moves
   rebaseWhen: "conflicted",
+  customManagers: [
+    {
+      description: "Process CNPG ImageCatalog extension image references",
+      customType: "regex",
+      managerFilePatterns: ["/\\.ya?ml$/"],
+      matchStrings: [
+        "reference:\\s+(?<depName>[^@\\s]+):(?<currentValue>[^@\\s/]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?",
+      ],
+      datasourceTemplate: "docker",
+    },
+  ],
   packageRules: [
     // Auto-merge rules
     {
-      description: "Auto-merge container images",
+      description: "Auto-merge trusted OCI digests",
       matchDatasources: ["docker"],
-      matchUpdateTypes: ["minor", "patch", "digest"],
+      matchUpdateTypes: ["digest"],
+      matchPackageNames: ["/home-operations/"],
       automerge: true,
       automergeType: "pr",
       ignoreTests: false,
+    },
+    {
+      description: "Auto-merge high-cadence OCI packages weekly",
+      matchDatasources: ["docker"],
+      matchUpdateTypes: ["minor", "patch"],
+      matchPackageNames: ["/kube-prometheus-stack/"],
+      automerge: true,
+      automergeType: "pr",
+      ignoreTests: false,
+      schedule: ["before 6am on Monday"],
     },
     {
       description: "Auto-merge GitHub Actions",
@@ -91,6 +112,7 @@
         commitMessageTopic: "{{{groupName}}} group",
       },
       minimumGroupSize: 5,
+      separateMinorPatch: true,
     },
     {
       description: "Mise Tools Group",
