@@ -1,49 +1,67 @@
 # Rendering a HelmRelease with flate
 
-If a chart version or the values of a HelmRelease change, render the
-HelmRelease with the values of this repository. Run flate from the
-repository root, and select the namespace of the HelmRelease with `-n`.
+A render shows the Kubernetes resources that a chart produces. Run flate
+from the repository root. A namespace groups resources in Kubernetes.
+Use `-n` to select the namespace of the HelmRelease.
 
-If git history is available, diff the render against the base. flate
-renders the base from that revision:
-
-```
-flate diff hr <name> -n <namespace> --base origin/main --no-progress -o diff
-```
-
-If the render of a HelmRelease is the same on both sides, flate leaves it
-out of the diff. A diff that names it then exits nonzero with
-`no HelmRelease named "<name>"`. This error means that the change does not
-reach the output of the HelmRelease. It does not mean that the HelmRelease
-is missing.
-
-If no history is available, as in the kritika checkout, build only the
-head:
+A merge base is a shared commit that Git uses to compare branches. If a
+chart version or HelmRelease values change, compare the pull request
+render with the merge-base render.
 
 ```
-flate build hr <name> -n <namespace> --no-progress
+flate diff hr '<name>' -n '<namespace>' --base '<merge-base-sha>' --no-progress -o diff
 ```
 
-flate reports every failure in the namespace, not only the failure of the
-HelmRelease that you asked for. If any failure occurs, it exits nonzero.
-Two conditions make a failure a finding on the changed line: the failure
-belongs to the HelmRelease under review, and the change caused it.
-Examples are a value that the chart schema rejects, or a template that
-fails with the values of this repository. A failure of another HelmRelease
-tells you nothing about the change. A source that flate was not able to
-fetch also tells you nothing.
+If a local clone has Git history, use `git merge-base HEAD '<target-ref>'`.
+In kritika, run the first `gh` command to get the base and head SHAs. A SHA
+identifies a Git commit. The base comes from the target branch. The head
+is the commit under review. Use the two SHAs in the second `gh` command
+to get the merge base.
 
-A successful render is an offline approximation of what the cluster
-applies. It includes the patches that Flux applies from a parent
-Kustomization. It has these limits:
+```
+gh api 'repos/<owner>/<repo>/pulls/<number>' --jq '{base: .base.sha, head: .head.sha}'
+gh api 'repos/<owner>/<repo>/compare/<base-sha>...<head-sha>' --jq '.merge_base_commit.sha'
+```
 
-- It leaves out CRDs and Secrets.
-- Templates that branch on Kubernetes capabilities see a bundled version.
-  This is the Kubernetes version of flate, not the version of the cluster.
+Kritika writes the head files to a checkout, a local copy of the files.
+The `origin` remote points to the repository on the server. The checkout
+has a `.git` directory with that remote and no commits. If the checkout
+lacks the merge base, flate fetches it from `origin`.
 
-Within these limits, get the label values, resource names, and ports for
-the search for dependents from the render. Do not get them from your
-reading of the template. If the whole output is too long, narrow it to the
-kinds that you need with `--only-kinds <Kind>,<Kind>`. Sometimes only the
-head renders. Then find what the base produced from upstream. You can also
-find it from the names that this repository already refers to.
+If you cannot get the merge-base SHA, pass the target branch to `--base`.
+Say that the diff compares against the latest commit on that branch.
+
+The baseline is the version that flate compares with the head. If the
+checkout lacks Git metadata, look for the baseline files in a separate
+directory. If you have those files, pass their directory to `--path-orig`
+in place of `--base`.
+
+If you cannot get a baseline, render the head with this command. State
+that the review covers the head render only.
+
+```
+flate build hr '<name>' -n '<namespace>' --no-progress
+```
+
+If the render stays the same, flate can exit with a nonzero status and
+show `no HelmRelease named "<name>"`. If you see that error, make sure
+that the name and namespace are correct. Read the other messages before
+you conclude that the render stayed the same.
+
+If a change causes the HelmRelease under review to fail to render, report
+the failure on the changed line. For example, the chart schema can reject
+a value. A template can fail with the values of this repository. If flate
+fails to fetch a source, say which render you cannot inspect.
+
+The render estimates what Flux applies to the cluster. flate renders
+without access to the cluster. The render includes the patches that Flux
+applies from a parent Kustomization.
+
+A CRD defines a Kubernetes resource type. flate leaves out CRDs and
+Secrets. If a template uses the Kubernetes version, flate supplies its
+bundled version.
+
+Use the rendered labels, resource names, and ports to find what depends
+on the change. If the render is too long, use `--only-kinds <Kind>,<Kind>`
+to show the resource types you need. If only the head renders, use
+upstream sources or references in this repository to find the old output.
