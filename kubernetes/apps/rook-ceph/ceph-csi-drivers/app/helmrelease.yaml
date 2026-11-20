@@ -21,6 +21,10 @@ spec:
       rbd:
         name: rook-ceph.rbd.csi.ceph.com
         snapshotPolicy: volumeGroupSnapshot
+        controllerPlugin:
+          containerExtraArgs:
+            csi-provisioner:
+              - --feature-gates=CrossNamespaceVolumeDataSource=true
     operatorConfig:
       driverSpecDefaults:
         imageSet:
