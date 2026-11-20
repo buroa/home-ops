@@ -22,7 +22,7 @@ spec:
         resources:
           requests:
             storage: 25Gi
-        storageClassName: openebs-hostpath
+        storageClassName: miroir-local
     controllerServiceAccount:
       name: actions-runner-controller
       namespace: actions-runner-system
