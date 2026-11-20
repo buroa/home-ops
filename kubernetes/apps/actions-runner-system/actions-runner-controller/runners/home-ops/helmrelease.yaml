@@ -54,6 +54,9 @@ spec:
               - mountPath: /var/run/secrets/talos.dev
                 name: talos
                 readOnly: true
+        securityContext:
+          fsGroup: 1001
+          fsGroupChangePolicy: OnRootMismatch
         serviceAccountName: home-ops-runner
         volumes:
           - name: talos
