@@ -1,20 +1,11 @@
 ---
 customization:
   extraKernelArgs:
-    - -init_on_alloc                             # Less security, faster puter
-    - -selinux                                   # Less security, faster puter
-    - -proc_mem.force_override                   # Less security, faster puter
-    - apparmor=0                                 # Less security, faster puter
-    - init_on_alloc=0                            # Less security, faster puter
-    - init_on_free=0                             # Less security, faster puter
     - amd_iommu=on                               # PCI Passthrough
     - amd_pstate=active                          # AMD P-State Driver
     - iommu=pt                                   # PCI Passthrough
     - pcie_aspm=off                              # Disable PCIe ASPM
-    - mitigations=off                            # Less security, faster puter
     - module_blacklist=igc                       # Disable onboard NIC
-    - security=none                              # Less security, faster puter
-    - talos.auditd.disabled=1                    # Less security, faster puter
     - talos.config.early={{ ENV.CONFIG_EARLY }}  # Early config
   systemExtensions:
     officialExtensions:
