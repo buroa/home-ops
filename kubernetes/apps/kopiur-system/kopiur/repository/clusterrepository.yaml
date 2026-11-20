@@ -18,13 +18,13 @@ spec:
       region: us-east-1
       tls:
         disableTls: true
-  credentialProjection:
-    allowed: true
   encryption:
     passwordSecretRef:
       name: kopiur-repository-secret
       namespace: kopiur-system
       key: KOPIA_PASSWORD
+  execution:
+    mode: Central
   maintenance:
     schedule:
       quick:
