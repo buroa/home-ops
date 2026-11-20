@@ -37,19 +37,19 @@ clusterSecret: op://Kubernetes/talos/CLUSTER_SECRET
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
-  image: factory.talos.dev/metal-installer/{{ ENV.SCHEMATIC }}:v1.14.5
+  image: factory.talos.dev/metal-installer/{{ ENV.SCHEMATIC }}:v1.14.6
 provisioning:
   diskSelector:
     match: disk.bus_path == "/pci0000:00/0000:00:01.4/0000:09:00.0/nvme"
   wipe: false
 ---
 apiVersion: v1alpha1
-kind: UserVolumeConfig
-name: local-hostpath
-volumeType: disk
+kind: RawVolumeConfig
+name: miroir
 provisioning:
   diskSelector:
     match: disk.bus_path == "/pci0000:00/0000:00:01.3/0000:08:00.0/nvme"
+  maxSize: 100%
 ---
 apiVersion: v1alpha1
 kind: FilesystemTrimConfig
@@ -63,6 +63,20 @@ apiVersion: v1alpha1
 kind: WatchdogTimerConfig
 device: /dev/watchdog0
 timeout: 5m
+---
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: dm_thin_pool
+---
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: drbd
+parameters:
+  - usermode_helper=disabled
+---
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: drbd_transport_tcp
 ---
 apiVersion: v1alpha1
 kind: KernelModuleConfig

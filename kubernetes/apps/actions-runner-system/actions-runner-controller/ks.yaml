@@ -23,8 +23,8 @@ metadata:
 spec:
   dependsOn:
     - name: actions-runner-controller
-    - name: openebs
-      namespace: openebs-system
+    - name: miroir-config
+      namespace: miroir-system
   interval: 1h
   path: ./kubernetes/apps/actions-runner-system/actions-runner-controller/runners
   prune: true

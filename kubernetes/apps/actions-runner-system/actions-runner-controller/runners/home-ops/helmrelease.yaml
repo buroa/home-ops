@@ -22,7 +22,7 @@ spec:
         resources:
           requests:
             storage: 25Gi
-        storageClassName: openebs-hostpath
+        storageClassName: miroir-local
     controllerServiceAccount:
       name: actions-runner-controller
       namespace: actions-runner-system
@@ -54,6 +54,9 @@ spec:
               - mountPath: /var/run/secrets/talos.dev
                 name: talos
                 readOnly: true
+        securityContext:
+          fsGroup: 1001
+          fsGroupChangePolicy: OnRootMismatch
         serviceAccountName: home-ops-runner
         volumes:
           - name: talos
