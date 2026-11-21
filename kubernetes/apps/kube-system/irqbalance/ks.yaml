@@ -9,7 +9,7 @@ spec:
   path: ./kubernetes/apps/kube-system/irqbalance/app
   prune: true
   sourceRef:
-    kind: GitRepository
-    name: flux-system
+    kind: ExternalArtifact
+    name: irqbalance
     namespace: flux-system
   targetNamespace: kube-system

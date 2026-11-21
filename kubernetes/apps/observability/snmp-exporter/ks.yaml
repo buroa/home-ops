@@ -9,7 +9,7 @@ spec:
   path: ./kubernetes/apps/observability/snmp-exporter/app
   prune: true
   sourceRef:
-    kind: GitRepository
-    name: flux-system
+    kind: ExternalArtifact
+    name: snmp-exporter
     namespace: flux-system
   targetNamespace: observability

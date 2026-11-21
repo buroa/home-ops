@@ -9,7 +9,7 @@ spec:
   path: ./kubernetes/apps/observability/gatus/app
   prune: true
   sourceRef:
-    kind: GitRepository
-    name: flux-system
+    kind: ExternalArtifact
+    name: gatus
     namespace: flux-system
   targetNamespace: observability

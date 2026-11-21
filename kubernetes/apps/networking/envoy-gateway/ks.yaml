@@ -9,8 +9,8 @@ spec:
   path: ./kubernetes/apps/networking/envoy-gateway/app
   prune: true
   sourceRef:
-    kind: GitRepository
-    name: flux-system
+    kind: ExternalArtifact
+    name: envoy-gateway
     namespace: flux-system
   targetNamespace: networking
   wait: true
@@ -29,7 +29,7 @@ spec:
   path: ./kubernetes/apps/networking/envoy-gateway/proxy
   prune: true
   sourceRef:
-    kind: GitRepository
-    name: flux-system
+    kind: ExternalArtifact
+    name: envoy-gateway
     namespace: flux-system
   targetNamespace: networking

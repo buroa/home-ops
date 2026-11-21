@@ -18,7 +18,7 @@ spec:
       APP: upbrr
   prune: true
   sourceRef:
-    kind: GitRepository
-    name: flux-system
+    kind: ExternalArtifact
+    name: upbrr
     namespace: flux-system
   targetNamespace: default

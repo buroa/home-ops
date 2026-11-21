@@ -9,7 +9,7 @@ spec:
   path: ./kubernetes/apps/networking/cloudflared/app
   prune: true
   sourceRef:
-    kind: GitRepository
-    name: flux-system
+    kind: ExternalArtifact
+    name: cloudflared
     namespace: flux-system
   targetNamespace: networking

@@ -9,8 +9,8 @@ spec:
   path: ./kubernetes/apps/kube-system/k8s-gpu-dra-driver/app
   prune: true
   sourceRef:
-    kind: GitRepository
-    name: flux-system
+    kind: ExternalArtifact
+    name: k8s-gpu-dra-driver
     namespace: flux-system
   targetNamespace: kube-system
   wait: true

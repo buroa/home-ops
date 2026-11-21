@@ -9,8 +9,8 @@ spec:
   path: ./kubernetes/apps/networking/external-dns/cloudflare
   prune: true
   sourceRef:
-    kind: GitRepository
-    name: flux-system
+    kind: ExternalArtifact
+    name: external-dns
     namespace: flux-system
   targetNamespace: networking
 ---
@@ -24,7 +24,7 @@ spec:
   path: ./kubernetes/apps/networking/external-dns/unifi
   prune: true
   sourceRef:
-    kind: GitRepository
-    name: flux-system
+    kind: ExternalArtifact
+    name: external-dns
     namespace: flux-system
   targetNamespace: networking

@@ -9,7 +9,7 @@ spec:
   path: ./kubernetes/apps/observability/karma/app
   prune: true
   sourceRef:
-    kind: GitRepository
-    name: flux-system
+    kind: ExternalArtifact
+    name: karma
     namespace: flux-system
   targetNamespace: observability
