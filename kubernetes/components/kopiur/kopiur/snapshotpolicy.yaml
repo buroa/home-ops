@@ -7,8 +7,6 @@ metadata:
 spec:
   compression:
     compressor: zstd
-  credentialProjection:
-    enabled: true
   mover:
     cache:
       capacity: ${KOPIUR_CAPACITY:=5Gi}
