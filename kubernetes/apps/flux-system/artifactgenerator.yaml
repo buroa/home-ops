@@ -18,3 +18,5 @@ spec:
           to: "@artifact/kubernetes/apps/{namespace}/{app}/"
         - from: "@repo/kubernetes/components/**"
           to: "@artifact/kubernetes/components/"
+          exclude:
+            - "alerts/**"
