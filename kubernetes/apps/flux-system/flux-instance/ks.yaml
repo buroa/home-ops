@@ -11,7 +11,7 @@ spec:
   path: ./kubernetes/apps/flux-system/flux-instance/app
   prune: true
   sourceRef:
-    kind: ExternalArtifact
-    name: flux-instance
+    kind: GitRepository
+    name: flux-system
     namespace: flux-system
   targetNamespace: flux-system
