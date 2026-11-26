@@ -39,7 +39,21 @@ spec:
     envoy:
       enabled: false
     hubble:
-      enabled: false
+      eventBufferCapacity: "65535"
+      metrics:
+        dashboards:
+          enabled: true
+        enabled:
+          - drop:labelsContext=source_namespace,destination_namespace;sourceContext=app|reserved-identity;destinationContext=app|reserved-identity
+          - flow:labelsContext=source_namespace,destination_namespace;sourceContext=app|reserved-identity;destinationContext=app|reserved-identity
+          - icmp:labelsContext=source_namespace,destination_namespace;sourceContext=app|reserved-identity;destinationContext=app|reserved-identity
+          - tcp:labelsContext=source_namespace,destination_namespace;sourceContext=app|reserved-identity;destinationContext=app|reserved-identity
+        serviceMonitor:
+          enabled: true
+      relay:
+        enabled: true
+      ui:
+        enabled: true
     ipam:
       mode: kubernetes
     ipv4NativeRoutingCIDR: 10.244.0.0/16

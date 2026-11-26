@@ -37,6 +37,8 @@ spec:
     cache:
       contentCacheSizeMb: 512
       metadataCacheSizeMb: 1024
+    podLabels:
+      app.kubernetes.io/name: kopiur-mover
   parameters:
     epoch:
       minDuration: 1h
