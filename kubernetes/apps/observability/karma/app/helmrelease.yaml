@@ -18,7 +18,7 @@ spec:
               repository: ghcr.io/prymitive/karma
               tag: v0.134@sha256:479c7bfad3c176b9c35c5a48c2ad8fa72d748f204314daff748fb51488f043da
             env:
-              ALERTMANAGER_URI: http://alertmanager-operated.observability.svc.cluster.local:9093
+              ALERTMANAGER_URI: http://vmalertmanager-victoria-metrics.observability.svc.cluster.local:9093
               LISTEN_PORT: &port 80
             probes:
               liveness: &probes
