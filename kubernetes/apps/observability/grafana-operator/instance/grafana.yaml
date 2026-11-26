@@ -24,7 +24,9 @@ spec:
     news:
       news_feed_enabled: "false"
     plugins:
+      disable_plugins: grafana-exploretraces-app,grafana-lokiexplore-app,grafana-metricsdrilldown-app,grafana-pyroscope-app
       plugin_admin_enabled: "false"
+      preinstall: victoriametrics-logs-datasource@0.34.0
       preinstall_auto_update: "false"
     security:
       angular_support_enabled: "true"

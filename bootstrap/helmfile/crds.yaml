@@ -27,5 +27,5 @@ releases:
   - name: grafana-operator
     namespace: observability
 
-  - name: kube-prometheus-stack
+  - name: prometheus-operator-crds
     namespace: observability

@@ -13,5 +13,6 @@ spec:
     fullnameOverride: *app
     reloader:
       readOnlyRootFileSystem: true
+      reloadStrategy: annotations
       podMonitor:
         enabled: true
