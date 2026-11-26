@@ -10,9 +10,6 @@ spec:
     name: rook-ceph
   interval: 1h
   values:
-    csi:
-      serviceMonitor:
-        enabled: true
     image:
       repository: ghcr.io/rook/ceph
     monitoring:
