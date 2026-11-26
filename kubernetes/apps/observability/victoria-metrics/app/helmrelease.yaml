@@ -52,7 +52,6 @@ spec:
       rules:
         RecordingRulesNoData:
           spec:
-            # The kube-scheduler quantile rules often have no samples
             expr: sum(vmalert_recording_rules_last_evaluation_samples{group!="kube-scheduler.rules"}) without(id) < 1
     external:
       grafana:
@@ -143,7 +142,6 @@ spec:
                   storage: 1Gi
     vmagent:
       spec:
-        # On another node, vmagent keeps scraping into its queue while the vmsingle node restarts
         affinity:
           podAntiAffinity:
             preferredDuringSchedulingIgnoredDuringExecution:
@@ -154,14 +152,10 @@ spec:
                       app.kubernetes.io/name: vmsingle
                   topologyKey: kubernetes.io/hostname
         extraArgs:
-          # Hides dropped targets and pre-relabel labels on the targets page
           promscrape.dropOriginalLabels: "true"
-          # kube-apiserver serves about 13 MB of metrics, close to the 16 MiB default
           promscrape.maxScrapeSize: 32MiB
-        # Clamp the intervals that other charts set on their monitors to the 20s default
         maxScrapeInterval: 20s
         minScrapeInterval: 20s
-        # A CPU request stops the operator from adding its default CPU limit
         resources:
           requests:
             cpu: 50m
@@ -228,7 +222,6 @@ spec:
     kubelet:
       vmScrape:
         spec:
-          # This list replaces the chart's rules, which also copy every node label onto each series
           relabelConfigs:
             - sourceLabels: [__metrics_path__]
               targetLabel: metrics_path

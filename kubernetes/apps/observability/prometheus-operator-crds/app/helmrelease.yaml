@@ -12,5 +12,4 @@ spec:
   values:
     crds:
       annotations:
-        # The chart ships its CRDs as templates, so an uninstall would delete them and every monitor
         helm.sh/resource-policy: keep
