@@ -12,6 +12,16 @@ config="$(mise run //talos:render-config "$usage_node")"
 printf '%s\n' "$config" | talosctl -n "$usage_node" apply-config -f /dev/stdin "${args[@]}"
 '''
 
+[tasks.gen-talosconfig]
+description = "Write a talosconfig from the Talos secrets bundle"
+run = '''
+secrets="$(mise run //talos:secrets)"
+talosctl gen config k8s https://k8s.internal:6443 --with-secrets /dev/stdin \
+    --output-types talosconfig --output "$TALOSCONFIG" --force <<<"$secrets"
+basename -s .yaml.j2 nodes/controlplane/*.yaml.j2 | xargs talosctl config endpoint
+basename -s .yaml.j2 nodes/*/*.yaml.j2 | xargs talosctl config node
+'''
+
 [tasks.reboot-node]
 description = "Reboot a node"
 extends = "node"
@@ -31,13 +41,14 @@ extends = "node"
 usage = 'arg "<node>" help="Node to render the config for"'
 run = '''
 schematic="$(mise run //talos:schematic-id "$usage_node")"
+secrets="$(mise run //talos:secrets)"
 role="controlplane"
 if [[ -f "nodes/workers/${usage_node}.yaml.j2" ]]; then
     role="workers"
 fi
-cluster="$(mise run //:template cluster.yaml.j2 -D "schematic=${schematic}")"
+cluster="$(mise run //:template cluster.yaml.j2 - -D "schematic=${schematic}" <<<"$secrets")"
 networking="$(mise run //:template networking.yaml.j2)"
-role_patch="$(mise run //:template "${role}.yaml.j2")"
+role_patch="$(mise run //:template "${role}.yaml.j2" - <<<"$secrets")"
 node_patch="$(mise run //:template "nodes/${role}/${usage_node}.yaml.j2")"
 talosctl machineconfig patch <(printf '%s\n' "$cluster") \
     -p @<(printf '%s\n' "$networking") \
@@ -90,8 +101,22 @@ arg "[args]" var=#true help="Extra arguments for talosctl upgrade"
 confirm = { message = "Upgrade node {{ usage.node }}?", default = "no" }
 run = '''
 eval "args=(${usage_args:-})"
-image="$(mise run //talos:machine-image "$usage_node")"
+image="$(mise run //talos:render-config "$usage_node" | yq -r -e 'select(.kind == "UnattendedInstallConfig") | .installer.image')"
 talosctl -n "$usage_node" upgrade -i "$image" -m powercycle --timeout=10m "${args[@]}"
+'''
+
+[tasks.validate]
+description = "Validate every node's config with a generated secrets bundle"
+run = '''
+secrets="$(talosctl gen secrets -o -)"
+cluster="$(minijinja-cli cluster.yaml.j2 - -D schematic=validate <<<"$secrets")"
+networking="$(minijinja-cli networking.yaml.j2)"
+for node in nodes/*/*.yaml.j2; do
+    role_patch="$(minijinja-cli "$(basename "$(dirname "$node")").yaml.j2" - <<<"$secrets")"
+    node_patch="$(minijinja-cli "$node")"
+    talosctl machineconfig patch /dev/stdin -p "$networking" -p "$node_patch" -p "$role_patch" <<<"$cluster" |
+        talosctl validate --strict --mode metal --config /dev/stdin
+done
 '''
 
 [tasks.schematic-id]
@@ -106,10 +131,6 @@ schematic="$(mise run //:template "$file" -D "config_early=${config_early}")"
 printf '%s\n' "$schematic" | curl -fsSX POST --data-binary @- "https://factory.talos.dev/schematics" | jq -er '.id'
 '''
 
-[tasks.machine-image]
+[tasks.secrets]
 hide = true
-usage = 'arg "[node]"'
-run = '''
-schematic="$(mise run //talos:schematic-id "${usage_node:-}")"
-mise run //:template cluster.yaml.j2 -D "schematic=${schematic}" | yq -r -e 'select(.kind == "UnattendedInstallConfig") | .installer.image'
-'''
+run = 'op document get talos --vault Kubernetes'
