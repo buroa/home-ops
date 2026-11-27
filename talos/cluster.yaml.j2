@@ -20,6 +20,7 @@ kind: ResolverConfig
 hostDNS:
   enabled: true
   forwardKubeDNSToHost: true # Requires Cilium socketLB features
+  logLevel: info
   resolveMemberNames: true
 searchDomains:
   disableDefault: true
@@ -170,3 +171,4 @@ serviceSubnets:
 apiVersion: v1alpha1
 kind: KubePrismConfig
 port: 7445
+readinessCheck: true
