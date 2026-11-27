@@ -7,6 +7,5 @@ resources:
   - ./receiver
   - ./grafanadashboard.yaml
   - ./helmrelease.yaml
-  - ./ocirepository.yaml
   - ./podmonitor.yaml
   - ./prometheusrule.yaml

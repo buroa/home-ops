@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: &app blackbox-exporter
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: blackbox-exporter
+    spec:
+      url: oci://ghcr.io/prometheus-community/charts/prometheus-blackbox-exporter
+      ref:
+        tag: 12.0.0
   interval: 1h
   values:
     fullnameOverride: *app
