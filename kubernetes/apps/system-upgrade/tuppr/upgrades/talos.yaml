@@ -7,7 +7,7 @@ metadata:
 spec:
   talos:
     # renovate: datasource=custom.talos-factory depName=siderolabs/talos
-    version: v1.14.6
+    version: v1.15.0-beta.1
   healthChecks:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Snapshot
@@ -21,3 +21,12 @@ spec:
       kind: CephCluster
       expr: |-
         status.ceph.health in ['HEALTH_OK']
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      expr: |-
+        has(status.readyInstances) && status.readyInstances == object.spec.instances &&
+        has(status.conditions) && status.conditions.exists(e, e.type == 'Ready' && e.status == 'True')
+    - apiVersion: miroir.home-operations.com/v1alpha1
+      kind: MiroirVolume
+      expr: |-
+        status.phase == 'Ready'
