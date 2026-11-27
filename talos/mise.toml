@@ -133,4 +133,4 @@ printf '%s\n' "$schematic" | curl -fsSX POST --data-binary @- "https://factory.t
 
 [tasks.secrets]
 hide = true
-run = 'op document get talos-secrets --vault Kubernetes'
+run = 'op document get talos --vault Kubernetes'
