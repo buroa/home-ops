@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: k8s-gpu-dra-driver
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: k8s-gpu-dra-driver
+    spec:
+      url: oci://ghcr.io/home-operations/charts-mirror/k8s-gpu-dra-driver
+      ref:
+        tag: 1.0.1
   interval: 1h
   values:
     cdi:

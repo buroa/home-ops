@@ -53,9 +53,9 @@ Use the upstream release notes in these cases.
   Read the label as `references/registry.md` describes.
 - Inspect the pinned image digest. Compare its version and revision labels
   with the release under review.
-- Find the chart source in the `OCIRepository` for the app
-  (`ocirepository.yaml`). The `url` gives the registry path. The `ref.tag`
-  gives the chart version.
+- Find the chart source in the `OCIRepository` chart template of the app
+  (`spec.chart` in `helmrelease.yaml`). The `spec.chart.spec.url` gives the
+  registry path. The `spec.chart.spec.ref.tag` gives the chart version.
 - For a chart at `oci://<registry>/<owner>/...`, read `sources` or `home`
   from the chart configuration in the registry. These fields can name
   the GitHub repository.
@@ -73,7 +73,7 @@ Use the upstream release notes in these cases.
   cannot find a release, list the releases. Look for the chart name.
 - In a digest-only update, the version tag stays the same. Compare
   `created` and `revision` for the old and new digests. Say whether the
-  project rebuilt the image and why, if you can find the reason. A
+  project rebuilt the image. If you can find the reason, give it. A
   security fix or a `latest`-style tag can explain a rebuild. Name the
   source revision of the new build.
 - If a release note says "see #2785", read the reference with
