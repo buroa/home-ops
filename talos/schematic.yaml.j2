@@ -6,7 +6,7 @@ customization:
     - iommu=pt                                   # PCI Passthrough
     - pcie_aspm=off                              # Disable PCIe ASPM
     - module_blacklist=igc                       # Disable onboard NIC
-    - talos.config.early={{ ENV.CONFIG_EARLY }}  # Early config
+    - talos.config.early={{ config_early }}  # Early config
   systemExtensions:
     officialExtensions:
       - siderolabs/drbd                          # Miroir DRBD9 Replication
